@@ -24,24 +24,17 @@ class _MealHistoryState extends State<MealHistory> {
     setState(() {
       _isLoading = true;
     });
-
-    await Future.delayed(const Duration(seconds: 1));
     try {
       final response = await ApiService.getMealHistory();
-      if (response != null && response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        debugPrint('Meal history data: $data');
+      if (response != null) {
         setState(() {
-          _mealHistory = List<Map<String, dynamic>>.from(data);
+          _mealHistory = List<Map<String, dynamic>>.from(response);
           _isLoading = false;
         });
       } else {
         setState(() {
-          _isLoading = true;
+          _isLoading = false;
         });
-        // Wait 5 seconds and try again
-        await Future.delayed(const Duration(seconds: 5));
-        await _loadMealHistory();
       }
     } catch (e) {
       debugPrint('Error loading meal history: $e');
@@ -72,54 +65,57 @@ class _MealHistoryState extends State<MealHistory> {
           const Divider(),
           _isLoading
               ? const Center(
-            child: Column(
-              children: [
-                Text(
-                  'Loading recent history...',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                child: Column(
+                  children: [
+                    Text(
+                      'Loading recent history...',
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                    SizedBox(height: 10),
+                    CircularProgressIndicator(),
+                  ],
                 ),
-                SizedBox(height: 10),
-                CircularProgressIndicator(),
-              ],
-            ),
-          )
+              )
               : _mealHistory.isEmpty
               ? const Text(
-            'No meal history available.',
-            style: TextStyle(fontSize: 14, color: Colors.grey),
-          )
+                'No meal history available.',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              )
               : ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: _mealHistory.length,
-            itemBuilder: (context, index) {
-              final meal = _mealHistory[index];
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: ListTile(
-                  leading: const Icon(Icons.restaurant),
-                  title: Text(
-                    meal['name'] ?? 'Unknown',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('KE: ${meal['KE'] ?? 'N/A'}'),
-                      Text(
-                        'Barcode: ${meal['barcode'] ?? 'N/A'}',
-                        style: const TextStyle(fontSize: 12),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _mealHistory.length,
+                itemBuilder: (context, index) {
+                  final meal = _mealHistory[index];
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: ListTile(
+                      leading: const Icon(Icons.restaurant),
+                      title: Text(
+                        meal['name'] ?? 'Unknown',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        _formatTimestamp(meal['timestamp']),
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('KE: ${meal['KE'] ?? 'N/A'}'),
+                          Text(
+                            'Barcode: ${meal['barcode'] ?? 'N/A'}',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                          Text(
+                            _formatTimestamp(meal['timestamp']),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
+                    ),
+                  );
+                },
+              ),
         ],
       ),
     );

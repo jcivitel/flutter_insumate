@@ -38,10 +38,9 @@ class ApiService {
     final apiKey = await ApiKeyManager.getApiKey();
     final urlString = '${baseUrl}v1/userinfo';
     final url = Uri.parse(urlString);
-    final response = await http.get(
-      url,
-      headers: {'Authorization': 'Token $apiKey'},
-    );
+    final response = await http
+        .get(url, headers: {'Authorization': 'Token $apiKey'})
+        .timeout(const Duration(seconds: 10));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       return data;
@@ -56,10 +55,26 @@ class ApiService {
     final apiKey = await ApiKeyManager.getApiKey();
     final urlString = '${baseUrl}v1/meal-entries/';
     final url = Uri.parse(urlString);
-    final response = await http.get(
-      url,
-      headers: {'Authorization': 'Token $apiKey'},
-    );
+    final response = await http
+        .get(url, headers: {'Authorization': 'Token $apiKey'})
+        .timeout(const Duration(seconds: 10));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data;
+    } else {
+      throw Exception(
+        'error while getting information: ${response.statusCode} ${response.body}',
+      );
+    }
+  }
+
+  static getRecentSearch() async {
+    final apiKey = await ApiKeyManager.getApiKey();
+    final urlString = '${baseUrl}v1/recent-searches/';
+    final url = Uri.parse(urlString);
+    final response = await http
+        .get(url, headers: {'Authorization': 'Token $apiKey'})
+        .timeout(const Duration(seconds: 10));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       return data;

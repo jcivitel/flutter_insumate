@@ -37,8 +37,8 @@ class DashboardPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Container(
-        padding: const EdgeInsets.all(20),
+      body: RefreshIndicator(
+        onRefresh: () { debugPrint('Refresh triggered'); return Future.value(); },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
