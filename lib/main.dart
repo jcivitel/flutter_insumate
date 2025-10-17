@@ -38,6 +38,15 @@ class MyApp extends StatelessWidget {
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Colors.green[700],
         ),
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: Colors.green[700],
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Colors.green[700],
+            side: BorderSide(color: Colors.green[700]!),
+          ),
+        ),
       ),
       debugShowCheckedModeBanner: false,
       home: LoginPage(),

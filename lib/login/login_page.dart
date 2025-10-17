@@ -11,6 +11,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  @override
+  void initState() {
+    super.initState();
+    checkExistingApiKey();
+  }
+
   final _formKey = GlobalKey<FormState>();
   String _username = '';
   String _password = '';
@@ -136,5 +142,21 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void checkExistingApiKey() async {
+    try {
+      var api_key = await ApiKeyManager.getApiKey();
+      if (api_key != null) {
+        Navigator.pushReplacement<void, void>(
+          context,
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => DashboardPage(),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('No API key found: $e');
+    }
   }
 }
