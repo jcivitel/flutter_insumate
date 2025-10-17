@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_insumate/login/login_page.dart';
 import 'package:flutter_insumate/pages/user_profile.dart';
+import 'package:flutter_insumate/pages/widgets/meal_history.dart';
+import 'package:flutter_insumate/pages/widgets/recent_search.dart';
+import 'package:flutter_insumate/tools/api_key_manager.dart';
 import 'package:flutter_insumate/tools/api_service.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -19,36 +23,28 @@ class DashboardPage extends StatelessWidget {
               );
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              ApiKeyManager.clearApiKey();
+              Navigator.pushReplacement<void, void>(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => LoginPage(),
+                ),
+              );
+            },
+          ),
         ],
       ),
-      body: const Center(
+      body: Container(
+        padding: const EdgeInsets.all(20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Card(
-              child: Center(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Your recent searches'),
-                        SizedBox(width: 10),
-                        Icon(Icons.search),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('No recent searches'),
-                        SizedBox(width: 10),
-                        Icon(Icons.history),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
+            Card(child: RecentSearch()),
+            SizedBox(height: 10),
+            Card(child: MealHistory()),
           ],
         ),
       ),
