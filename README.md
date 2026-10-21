@@ -14,3 +14,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/chart?repos=jcivitel/flutter_insumate&type=date&legend=bottom-right)](https://www.star-history.com/?repos=jcivitel%2Fflutter_insumate&type=date&legend=bottom-right)
